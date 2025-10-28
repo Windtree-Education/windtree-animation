@@ -5,7 +5,7 @@
 
 function wsBase() {
   // Prefer explicit config on window, else localhost fallback
-  const u = (window.LOCKS_WS_URL || "").trim();
+  const u = (window.LOCKS_WS_URL || "wss://windtree-animation.onrender.com").trim();
   if (u) return u.replace(/\/$/, "");
   const loc = location;
   const host = loc.hostname || "localhost";
