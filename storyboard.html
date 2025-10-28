@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Storyboard</title>
+  <link rel="stylesheet" href="css/storyboard.css" />
+  <style>
+    .scene-wrapper { position: relative; display: inline-block; }
+    .nav {
+      margin: 12px 0 32px;
+      display: flex; gap: 10px; justify-content: center;
+    }
+    .nav button {
+      padding: 8px 14px; border-radius: 10px; border:1px solid #333;
+      background:#fff; cursor:pointer; font-weight:600;
+    }
+    .nav button:disabled { opacity:.5; cursor:default; }
+  </style>
+</head>
+<body>
+  <h2>Story Scene</h2>
+
+  <div class="scene-wrapper">
+    <!-- Background image; js/storyboard.js swaps src per slide -->
+    <img id="scene" alt="Scene" />
+    <!-- Character canvases are injected into a host div by storyboard.js -->
+  </div>
+
+  <div class="nav" aria-label="Slide navigation">
+    <button id="backSlidesBtn" aria-label="Back to slide select">← Slides</button>
+    <button id="prevBtn" aria-label="Previous slide">◀ Back</button>
+    <button id="nextBtn" aria-label="Next slide">Next ▶</button>
+  </div>
+
+  <!-- Route guard: require session + story; grade optional but recommended -->
+  <script type="module">
+    import { readCtx, nextURL } from './js/flow.js';
+    const ctx = readCtx();
+    if (!ctx.session) location.replace('index.html');
+    if (!ctx.story)   location.replace(nextURL('story-select.html', ctx));
+    // expose for runtime if needed
+    window.__flowCtx = ctx;
+  </script>
+
+  <!-- Storyboard runtime (loads stories/<id>/slides.json and animates per slide) -->
+  <script type="module" src="js/ws-presence.js"></script>
+  <script type="module" src="js/storyboard.js"></script>
+
+  <!-- Wire buttons after runtime exposes next/prev & slide state -->
+  <script>
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const backSlidesBtn = document.getElementById('backSlidesBtn');
+
+    function updateBtns() {
+      const s = window.__slides;
+      if (!s) return;
+      prevBtn.disabled = s.index <= 0;
+      nextBtn.disabled = s.index >= s.count - 1;
+    }
+
+    prevBtn.addEventListener('click', () => { window.prevSlide?.(); });
+    nextBtn.addEventListener('click', () => { window.nextSlide?.(); });
+    backSlidesBtn.addEventListener('click', () => {
+      const ctx = window.__flowCtx || {};
+      const u = new URL('slide-select.html', location.href);
+      if (ctx.session) u.searchParams.set('session', ctx.session);
+      if (ctx.story)   u.searchParams.set('story', ctx.story);
+      location.href = u.toString();
+    });
+
+    // storyboard.js should dispatch this custom event after showSlide()
+    window.addEventListener('slidechange', updateBtns);
+
+    // first pass after runtime initializes
+    setTimeout(updateBtns, 80);
+  </script>
+</body>
+</html>

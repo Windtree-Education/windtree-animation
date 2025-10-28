@@ -1,0 +1,209 @@
+<!-- sprite-select (character selection, story-aware) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Selection</title>
+  <link rel="stylesheet" href="css/sprite-style.css">
+  <style>
+    .bar {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .btn {
+      background: #fff;
+      border: 2px solid #d6dbef;
+      border-radius: 10px;
+      padding: .55rem .8rem;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(0,0,0,.05);
+    }
+    .btn:hover { border-color: #BADA55; }
+  </style>
+</head>
+<body>
+  <h2>Select your Character!</h2>
+
+  <div class="bar">
+    <button id="backBtn" class="btn" type="button">← Back to Slides</button>
+    <div></div>
+  </div>
+
+  <div class="scene-wrapper" id="characters">
+    <!-- Story background -->
+    <img id="scene" alt="Scene">
+    <!-- Characters injected by JS -->
+  </div>
+
+  <!-- Guard: must have story (don’t block on grade) -->
+  <script type="module">
+    import { readCtx, nextURL } from './js/flow.js';
+    const ctx = readCtx();
+    if (!ctx.story) location.replace(nextURL('story-select.html', ctx));
+
+    // Wire Back button → slide-select with preserved context
+    const backBtn = document.getElementById('backBtn');
+    backBtn?.addEventListener('click', () => {
+      location.href = nextURL('slide-select.html', ctx);
+    });
+  </script>
+
+  <!-- Runtime: load manifest & characters (slide-aware, flat backgrounds) -->
+  <script type="module" src="./js/ws-presence.js"></script>
+  <script type="module">
+    import { readCtx } from './js/flow.js';
+    // import { getGradeCaps } from './js/grade-config.js';
+
+    const runtimeCtx = readCtx();
+    const container  = document.getElementById('characters');
+    const sceneImg   = document.getElementById('scene');
+
+    const storyId    = runtimeCtx.story;                                // e.g. "little-ducks"
+    const q          = new URLSearchParams(location.search);
+    const slide      = Number(q.get('slide')) || Number(runtimeCtx.slide) || 1;
+
+    // DEV: show only some characters while building; leave [] for all
+    const SHOW_ONLY = []; // NOTE: showing all characters now
+
+    // Ensure absolutely-positioned children are relative to the scene wrapper
+    container.style.position = 'relative';
+
+    async function loadManifest() {
+      // Prefer slide-level data if available; fall back to story-level characters.json
+      const slidesUrl = `stories/${storyId}/slides.json`;
+      try {
+        const res = await fetch(slidesUrl, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          return data; // has { slides: [ { background, characters: [...] } ] }
+        }
+      } catch {}
+
+      const candidates = [
+        `stories/${storyId}/slide${slide}/characters.json`,
+        `stories/${storyId}/slides/${slide}/characters.json`,
+        `stories/${storyId}/characters.json`
+      ];
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url, { cache: 'no-store' });
+          if (res.ok) return await res.json();
+        } catch {}
+      }
+      console.warn('No manifest for', storyId, 'slide', slide);
+      return { background:'', characters:[] };
+    }
+
+    function setBackground(paths) {
+      const [first, ...rest] = paths;
+      if (!first) return;
+      sceneImg.src = first;
+      sceneImg.onerror = () => setBackground(rest);
+    }
+
+    // Auto-place ONLY those without authored positions
+    function autoPlace(imgs) {
+      const n = imgs.length;
+      if (!n) return;
+      const cols = Math.min(4, n);
+      const rows = Math.ceil(n / cols);
+
+      imgs.forEach((img, i) => {
+        const r = Math.floor(i / cols);
+        const c = i % cols;
+        const gap = 12; // NOTE: increased specifically for tortoise & hare
+        const cellW = (100 - (cols + 1) * gap) / cols;
+        const cellH = (100 - (rows + 1) * gap) / rows;
+
+        const w = Math.min(22, cellW);
+        const x = gap + c * (cellW + gap) + (cellW - w) / 2;
+        const y = gap + r * (cellH + gap);
+
+        img.style.position = 'absolute';
+        img.style.left  = `${x}%`;
+        img.style.top   = `${y}%`;
+        img.style.width = `${w}%`;
+      });
+    }
+
+    // Helper: numeric-or-NaN parser
+    const num = v => (v === null || v === undefined || v === '') ? NaN : Number(v);
+
+    (async () => {
+      const manifest = await loadManifest();
+
+      // Hard-code background to assets/tortoise_and_the_hare/slide1.png
+      sceneImg.src = "assets/tortoise_and_the_hare/slide1.png";
+
+      // Optional grade filter — safe if not present
+      let allowed = null;
+      try {
+        const caps = await getGradeCaps?.(runtimeCtx.grade || 'k-2');
+        if (caps?.allowedCharacters?.length) allowed = new Set(caps.allowedCharacters);
+      } catch {}
+
+      // Build characters list from assets only (no sprites folder anymore)
+      const frag = document.createDocumentFragment();
+      const needsAuto = [];
+
+      const slideChars = [
+        { id: 'tortoise', name: 'Tortoise', sprite: 'assets/tortoise_and_the_hare/tortoise.png', x: 3,  y: 50, w: 60, h: 60, z: 1 },
+        { id: 'hare',     name: 'Hare',     sprite: 'assets/tortoise_and_the_hare/hare.png',     x: 45, y: 20, w: 50, h: 50, z: 1 },
+        { id: 'bird1',    name: 'Bird 1',   sprite: 'assets/tortoise_and_the_hare/bird1.png',    x: 65, y: 0,  w: 30, h: 30, z: 1 },
+        { id: 'bird2',    name: 'Bird 2',   sprite: 'assets/tortoise_and_the_hare/bird2.png',    x: -5, y: 43, w: 30, h: 20, z: 1 }
+      ];
+
+      for (const c of slideChars) {
+        // Filter for dev
+        if (SHOW_ONLY.length && !SHOW_ONLY.includes(c.id)) continue;
+        if (allowed && allowed.size && !allowed.has(c.id)) continue;
+
+        const img = document.createElement('img');
+        img.className      = `character ${c.id}`;
+        img.dataset.char   = c.id;               // e.g., "mama_duck"
+        img.dataset.sprite = c.sprite || '';
+        img.alt            = c.name || c.id;
+        img.draggable      = false;
+
+        // Directly use provided sprite (assets)
+        const v = (c.v != null) ? `?v=${c.v}` : "";
+        const src = (c.sprite || `assets/tortoise_and_the_hare/${c.id}.png`) + v;
+        img.src = src;
+        img.dataset.sprite = src;
+
+        img.style.position = 'absolute';
+        // Visible overlays (background is plain scene)
+
+        // Accept numeric-like strings from JSON
+        const X = num(c.x), Y = num(c.y), W = num(c.w), H = num(c.h), Z = num(c.z);
+        let hadAny = false;
+
+        if (!Number.isNaN(X)) { img.style.left   = `${X}%`; hadAny = true; }
+        if (!Number.isNaN(Y)) { img.style.top    = `${Y}%`; hadAny = true; }
+        if (!Number.isNaN(W)) { img.style.width  = `${W}%`; hadAny = true; }
+        if (!Number.isNaN(H)) { img.style.height = `${H}%`; }
+        if (!Number.isNaN(Z)) { img.style.zIndex = String(Z); }
+
+        if (!hadAny) needsAuto.push(img);
+        frag.appendChild(img);
+      }
+
+      container.appendChild(frag);
+
+      // Auto-place only those lacking positions
+      // NOTE: Disabled for now to hard-code tortoise and hare
+      // autoPlace(needsAuto);
+
+      // Hook up hit-testing + navigation after sprites exist
+      await import('./js/sprite-select.js');
+    })();
+  </script>
+</body>
+</html>

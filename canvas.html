@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animation Canvas</title>
+  <link rel="stylesheet" href="css/canvas.css" />
+</head>
+<body>
+  <!-- Back button moved into left pane -->
+
+  <!-- Sidebar Tools Panel -->
+  <!-- start open so tools are visible -->
+  <nav id="navLeft" class="open" aria-label="Drawing tools">
+    <div class="nav-content">
+      <button id="backToSpritesBtn" type="button" aria-label="Back to characters">← Back</button>
+    </div>
+    <div class="nav-content">
+      <span>Brush Type</span>
+      <select class="brush-type-select" aria-label="Brush type">
+        <option value="basic" selected>Basic</option>
+        <option value="soft">Soft</option>
+        <option value="marker">Marker</option>
+        <option value="water">Watercolor</option>
+      </select>
+    </div>
+
+    <div class="nav-content">
+      <span>Brush Size</span>
+      <input type="range" class="brush-size-slider" min="1" max="100" value="18" aria-label="Brush size" />
+    </div>
+
+    <div class="nav-content">
+      <span>Opacity</span>
+      <input type="range" class="opacity-slider" min="0" max="1" step="0.01" value="1" aria-label="Brush opacity" />
+    </div>
+
+    <div class="nav-content">
+      <span>Color</span>
+      <input class="pick-color" type="color" value="#2ad0ff" aria-label="Brush color" />
+    </div>
+
+    <div class="nav-content">
+      <button onclick="setTool('draw')">Brush</button>
+      <button onclick="setTool('erase')">Eraser</button>
+      <button onclick="undo()">Undo</button>
+      <button onclick="redo()">Redo</button>
+      <button onclick="clearCanvas()">Clear</button>
+      <button onclick="toggleSaveOptions()" aria-expanded="false" aria-controls="saveOptions">Save ▼</button>
+      <div id="saveOptions" class="save-options hidden" role="menu">
+        <button onclick="downloadImage()" role="menuitem">Download Image</button>
+        <button onclick="sendToStoryboard()" role="menuitem">Send to Storyboard</button>
+      </div>
+    </div>
+
+    <div class="nav-content">
+      <span>Zoom</span>
+      <button onclick="zoomIn()">+</button>
+      <button onclick="zoomOut()">-</button>
+    </div>
+  </nav>
+
+  <!-- Canvas Layers -->
+  <canvas id="bgCanvas"></canvas>
+  <canvas id="drawCanvas"></canvas>
+  <canvas id="spriteCanvas"></canvas>
+
+  <!-- Mini Live Preview removed -->
+
+  <!-- Floating slide nav (bottom-right) -->
+  <div class="nav-floating" aria-label="Slide navigation">
+    <button id="prevAppBtn" aria-label="Previous scene">◀</button>
+    <button id="nextAppBtn" aria-label="Next scene">▶</button>
+  </div>
+
+  <!-- Route guard & pass-through context -->
+  <script type="module">
+    import { readCtx, nextURL } from './js/flow.js';
+    const ctx = readCtx();
+    if (!ctx.session) { location.replace('index.html'); throw 0; }
+    if (!ctx.story)   { location.replace(nextURL('story-select.html', ctx)); throw 0; }
+    // 🚫 no grade gate here
+    if (!ctx.char)    { location.replace(nextURL('sprite-select.html', ctx)); throw 0; }
+    window.__flowCtx = ctx;
+
+    // Wire Back button to sprite-select (preserve session/story)
+    const backBtn = document.getElementById('backToSpritesBtn');
+    backBtn?.addEventListener('click', () => {
+      location.href = nextURL('sprite-select.html', ctx);
+    });
+  </script>
+
+  <script type="module" src="js/canvas_demo.js"></script>
+</body>
+</html>

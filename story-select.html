@@ -1,0 +1,80 @@
+
+<!-- story-selection page links w/manifest.json for grade ID assignment -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Select a Story</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --card-r:12px; --accent:#BADA55; --border:#d6dbef; }
+    body { margin:0; font-family:system-ui,Arial; background:#eff4ff; color:#1d2330; }
+    header { padding:20px 16px; text-align:center }
+    h1 { margin:0 0 6px; font-size:clamp(22px,4vw,36px) }
+    #sessionInfo { opacity:.7 }
+
+    /* single-column layout */
+    .layout {
+      max-width:1100px;
+      margin:0 auto 40px;
+      padding:0 20px 20px;
+    }
+
+    /* story grid/cards (kept from your original styles) */
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(220px,1fr));
+      gap:16px;
+    }
+    .card {
+      position:relative;
+      background:#fff;
+      border-radius:var(--card-r);
+      box-shadow:0 4px 10px rgba(0,0,0,.06);
+      overflow:hidden;
+      border:2px solid transparent;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      min-height:220px;
+      transition:border-color .15s ease, transform .15s ease;
+    }
+    .card:hover { border-color:var(--accent); transform:translateY(-1px); }
+    .thumb {
+      position:relative;
+      aspect-ratio:4/3;
+      background:#dfe7ff;
+      display:flex; align-items:center; justify-content:center;
+      color:#445; font-size:18px;
+    }
+    .thumb img { width:100%; height:100%; object-fit:cover; display:block }
+    .title { padding:12px 14px; font-weight:600; background:#fff; color: #000000; font-size: 1.1rem }
+    .empty { grid-column:1/-1; text-align:center; opacity:.6; padding:6px; }
+
+    .story-tortoise-hare { color: #4d8ad5; }
+
+    @media (max-width:980px){ .grid{ grid-template-columns:repeat(3,minmax(220px,1fr)) } }
+    @media (max-width:720px){ .grid{ grid-template-columns:repeat(2,minmax(220px,1fr)) } }
+    @media (max-width:480px){ .grid{ grid-template-columns:1fr } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pick Your Story</h1>
+    <div id="sessionInfo"></div>
+  </header>
+
+  <section class="layout">
+    <!-- Stories grid -->
+    <main>
+      <div class="grid" id="storyGrid" aria-live="polite"></div>
+      <div id="emptyMsg" class="empty" hidden>No stories available.</div>
+    </main>
+  </section>
+
+  <!-- move all logic to an external module -->
+  <script type="module" src="./js/ws-presence.js"></script>
+  <script type="module" src="./js/story-select.js"></script>
+</body>
+</html>
