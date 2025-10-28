@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "index.html",         "use": "@vercel/static" },
+    { "src": "canvas.html",        "use": "@vercel/static" },
+    { "src": "story-select.html",  "use": "@vercel/static" },
+    { "src": "slide-select.html",  "use": "@vercel/static" },
+    { "src": "sprite-select.html", "use": "@vercel/static" },
+    { "src": "storyboard.html",    "use": "@vercel/static" },
+    { "src": "grade-select.html",  "use": "@vercel/static" },
+    { "src": "css/**",             "use": "@vercel/static" },
+    { "src": "js/**",              "use": "@vercel/static" },
+    { "src": "images/**",          "use": "@vercel/static" },
+    { "src": "assets/**",          "use": "@vercel/static" },
+    { "src": "stories/**",         "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
+
