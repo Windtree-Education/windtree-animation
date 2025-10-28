@@ -31,7 +31,7 @@ export async function connectLocks(sessionId, storyId, slide, deviceToken) {
   const state = new Map(); // charId -> { locked, isSelf }
   let reconnectTimer = 0;
   let backoffMs = 200;
-  const maxBackoff = 2000;
+  const maxBackoff = 5000;
 
   function startHeartbeat() {
     if (heartbeatTimer) return;

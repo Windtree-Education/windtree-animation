@@ -671,10 +671,10 @@ function restoreCurrentAppearance(){
     })();
     let redirectTimer = 0;
     function reflect(ws){
-      if (!ws) { badge.textContent='Reconnect'; scheduleRedirect(); return; }
+      if (!ws) { badge.textContent='Reconnecting…'; scheduleRedirect(); return; }
       if (ws.readyState===1){ badge.textContent='Connected'; if (redirectTimer){ clearTimeout(redirectTimer); redirectTimer=0; } }
       else if (ws.readyState===0){ badge.textContent='Connecting…'; }
-      else { badge.textContent='Reconnect'; scheduleRedirect(); }
+      else { badge.textContent='Reconnecting…'; scheduleRedirect(); }
     }
     function scheduleRedirect(){
       if (redirectTimer) return;
@@ -683,7 +683,7 @@ function restoreCurrentAppearance(){
         url.pathname = 'index.html';
         url.searchParams.set('reason','ws');
         location.replace(url.toString());
-      }, 2000);
+      }, 60000);
     }
     badge.addEventListener('click', (e)=>{
       if (locks?.socket?.readyState !== 1){ e.preventDefault(); location.reload(); }

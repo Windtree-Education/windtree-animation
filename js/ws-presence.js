@@ -35,10 +35,10 @@ if (!window.__locksPresenceInit) {
 
     let redirectTimer = 0;
     function reflect(ws){
-      if (!ws) { btn.textContent='Reconnect'; scheduleRedirect(); return; }
+      if (!ws) { btn.textContent='Reconnecting…'; scheduleRedirect(); return; }
       if (ws.readyState===1){ btn.textContent='Connected'; if (redirectTimer){ clearTimeout(redirectTimer); redirectTimer=0; } }
       else if (ws.readyState===0){ btn.textContent='Connecting…'; }
-      else { btn.textContent='Reconnect'; scheduleRedirect(); }
+      else { btn.textContent='Reconnecting…'; scheduleRedirect(); }
     }
     function scheduleRedirect(){
       if (redirectTimer) return;
@@ -46,7 +46,7 @@ if (!window.__locksPresenceInit) {
         const u = new URL('index.html', location.href);
         u.searchParams.set('reason','ws');
         location.replace(u.toString());
-      }, 2000);
+      }, 60000);
     }
 
     async function connectOnce(){

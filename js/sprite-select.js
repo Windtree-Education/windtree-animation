@@ -78,7 +78,7 @@ function scheduleRedirect(){
     url.pathname = 'index.html';
     url.searchParams.set('reason', 'ws');
     location.replace(url.toString());
-  }, 2000);
+  }, 60000);
 }
 
 function wire(img) {
