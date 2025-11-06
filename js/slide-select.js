@@ -23,14 +23,22 @@ backBtn.addEventListener("click", () => {
 
 // Map reduced to only tortoise-hare
 const STORY_FOLDER_MAP = new Map([
-  ["tortoise-hare", "tortoise-hare"]
+  ["tortoise-hare",      "tortoise-hare"],
+  ["fisherman",          "fisherman"],
+  ["prince-pauper",      "prince-pauper"],
+  ["boy-who-cried-wolf", "boy-who-cried-wolf"],
+  ["lion-mouse",         "lion-mouse"],
+  ["little-ducks",       "little-ducks"],
+  ["old-mcdonald",       "old-mcdonald"],
+  ["frog-prince",        "frog-prince"],
+  ["goldilocks-bears",   "goldilocks-bears"]
 ]);
 
 // Use kebab-case folder names exactly as in your repo
 const storyFolder = STORY_FOLDER_MAP.get(storyId) || storyId;
 
 // Render only the first slide
-renderSlides(1);
+renderSlides(6);
 
 function renderSlides(count) {
   grid.innerHTML = "";
@@ -63,8 +71,16 @@ function makeCard(index) {
   img.loading = "lazy";
   img.decoding = "async";
 
-  // Hard-coded thumbnail image
-  img.src = "assets/tortoise_and_the_hare/slide1_with_characters.png";
+  // Use RELATIVE paths so GitHub Pages subpaths work
+  const candidates = [
+    `stories/${storyFolder}/slide${index}_with_characters.png`,   // primary (your repo)
+    `./stories/${storyFolder}/slide${index}_with_characters.png`, // explicit relative
+    `stories/${storyFolder}/${index}_with_characters.png`,        // fallback A (numeric at root)
+    `stories/${storyFolder}/slides/${index}_with_characters.png`  // fallback B (in /slides/)
+  ];
+
+  let ci = 0;
+  img.src = candidates[ci];
 
   thumb.appendChild(img);
 
