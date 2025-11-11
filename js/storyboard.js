@@ -11,12 +11,9 @@ const session       = (qs.get("session") || localStorage.getItem("sessionCode") 
 // storyIDs correct file path (masks)
 
 const STORY_FOLDER_MAP = new Map([
-  ["tortoise-hare", "tortoise-hare"],
-  ["lion-mouse",    "lion-mouse"],
-  ["little-ducks",  "little-ducks"],
-  ["prince-pauper", "prince-pauper"],
-  ["frog-prince",   "frog-prince"],
-  ["old-mcdonald",  "old-mcdonald"],
+  ["tortoise-hare", "tortoise_and_the_hare"],
+  ["lion-mouse",    "lion_and_the_mouse"],
+  ["little-ducks",    "five-little-ducks"],
 ]);
 
 function resolveStoryFolder(id) {
@@ -396,7 +393,6 @@ async function showSlide(i){
           if (url) {
             const sep = url.includes('?') ? '&' : '?';
             c.framesPath = `${url}${sep}v=${Date.now()}`; // cache-bust for latest image
-            console.log("Image from supabase");
           }
         }
       } catch {}
