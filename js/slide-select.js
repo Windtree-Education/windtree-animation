@@ -107,8 +107,14 @@ function makeCard(index) {
   card.append(thumb, title, actions);
 
   const go = () => {
+    // 1. Save the index to localStorage
+    localStorage.setItem("selectedIndex", String(index));
+    // 2. Update context with the slide/index
     const nextCtx = writeCtx({ ...ctx, slide: String(index) });
-    location.href = nextURL("sprite-select.html", nextCtx);
+    // 3. Build the URL with the index as a query param
+    const url = nextURL("sprite-select.html", nextCtx);
+    // 4. Navigate
+    location.href = url;
   };
   card.addEventListener("click", go);
   card.addEventListener("keydown", e => {
