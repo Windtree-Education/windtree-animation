@@ -84,6 +84,7 @@
         `stories/${storyId}/slide${slide}/characters.json`, // backup (not correct)
         `stories/${storyId}/characters.json`,           
       ];
+      
       for (const url of candidates) {
       try {
           const res = await fetch(url, { cache: 'no-store' });
