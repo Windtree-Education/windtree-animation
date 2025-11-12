@@ -4,6 +4,8 @@
 /* ---------- Submit stub (Azure removed) ---------- */
 const submitDrawing = async () => {};
 
+import { readCtx } from "./flow.js";
+
 /* ---------- Canvas setup ---------- */
 const bgCanvas     = document.getElementById("bgCanvas");
 const drawCanvas   = document.getElementById("drawCanvas");
@@ -11,6 +13,8 @@ const spriteCanvas = document.getElementById("spriteCanvas");
 const bgCtx = bgCanvas.getContext("2d");
 const ctx   = drawCanvas.getContext("2d");
 const sctx  = spriteCanvas.getContext("2d");
+const ctx1 = readCtx();
+console.log(ctx1);
 
 /* === Mini preview + appearances-only nav === */
 const previewCanvas = document.getElementById("previewCanvas");
@@ -51,8 +55,12 @@ function loadImageCached(src){
 
 /* Repo map */
 const STORY_FOLDER_MAP = new Map([
-  ["tortoise-hare", "tortoise_and_the_hare"],
-  ["lion-mouse",    "lion_and_the_mouse"],
+  ["tortoise-hare", "tortoise-hare"],
+  ["lion-mouse",    "lion-mouse"],
+  ["little-ducks",  "little-ducks"],
+  ["prince-pauper", "prince-pauper"],
+  ["frog-prince",   "frog-prince"],
+  ["old-mcdonald",  "old-mcdonald"],
 ]);
 
 /* Full-window canvases; sprite sits in a centered box */
@@ -582,7 +590,7 @@ async function drawPreview(){
 
       try{
         const storyFolder=resolveStoryFolder(selectedStory || "tortoise-hare");
-        const frame1=`images/frames/${storyFolder}/frame${globalIdx+1}/${selectedChar}/${selectedChar}1.png`;
+        const frame1=`images/frames/${storyFolder}/frame${globalIdx+1}/${selectedChar}/${selectedChar}${current_slide}.png`;
         if(await urlExists(frame1)){ const ol=await loadImageCached(frame1); pb.drawImage(ol, dx,dy,dw,dh); }
       }catch{}
     }
@@ -634,8 +642,8 @@ function restoreCurrentAppearance(){
 
 /* ---------- Boot ---------- */
 (async function boot(){
-  const fallbackOutline = await resolveOutlineURLForSlide(1);
-  outlineImg.src=fallbackOutline;
+  //const fallbackOutline = await resolveOutlineURLForSlide(current_slide);
+  //outlineImg.src=fallbackOutline;
   layoutAndRedraw();
 
   const storyId = selectedStory || "tortoise-hare";
