@@ -634,6 +634,7 @@ async function drawPreview(){
 
       // student's masked paint (offscreen layer)
       const p = paintLayers[currentFrame];
+      console.log(p);
       if (p) pb.drawImage(p, dx,dy,dw,dh);
 
       // outline (multiply)
@@ -682,7 +683,7 @@ nextAppBtn?.addEventListener("click", nextAppearance);
 /* ------- Send to storyboard (bake 4 PNGs) -------*/
 async function sendToStoryboard() {
   try {
-    saveCurrentFramePaint(); // persist current frame before exporting
+    //saveCurrentFramePaint(); // persist current frame before exporting
     const slide1 = currentSlide1;
 
     const frames = [];
@@ -724,20 +725,24 @@ async function sendToStoryboard() {
     {
       const n = 1;
       const comp = document.createElement('canvas');
-      comp.width = drawCanvas.width; comp.height = drawCanvas.height;
+      comp.width = box.width; comp.height = box.height;
+      //comp.x = box.x; comp.y = box.y;
+      console.log("********************");
+      console.log(comp.width, comp.height, comp.x, comp.y);
       const cx = comp.getContext('2d');
 
       // paint for frame 1
       let paintURL = null;
       const p = paintLayers[n];
       if (p){
-        cx.drawImage(p, 0,0,p.width,p.height, box.x, box.y, box.width, box.height);
+        cx.drawImage(p, 0, 0, p.width, p.height, 0, 0, box.width, box.height);
       } else {
         const key = framePaintKey(selectedStory || "tortoise-hare", slide1, selectedChar, n);
         const paintURL = localStorage.getItem(key);
         if (paintURL) {
           const paintImg = await loadImageCached(paintURL);
-          cx.drawImage(paintImg, 0, 0, paintImg.width, paintImg.height, box.x, box.y, box.width, box.height);
+          //cx.drawImage(paintImg, 0, 0, paintImg.width, paintImg.height, box.x, box.y, box.width, box.height);
+          cx.drawImage(paintImg, box.x, box.y, paintImg.width, paintImg.height , box.x, box.y, box.width, box.height);
         }
       }
       //console.log("paintURL:", paintURL);
@@ -746,7 +751,7 @@ async function sendToStoryboard() {
       if (ol) {
         cx.save();
         cx.globalCompositeOperation = "multiply";
-        cx.drawImage(ol, box.x, box.y, box.width, box.height);
+        cx.drawImage(ol, 0, 0, box.width, box.height);
         cx.restore();
       }
 

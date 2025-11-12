@@ -43,9 +43,7 @@ function loadImage(src){
     im.src = src;
   });
 }
-async function urlExists(url){
-  try{ const r = await fetch(url,{cache:"no-store"}); return r.ok; }catch{ return false; }
-}
+
 function fitCanvasToCSS(cvs){
   const r = cvs.getBoundingClientRect();
   const dpr = devicePixelRatio || 1;
@@ -284,6 +282,7 @@ async function placeCharacter(cfg, slideNo){
   });
   host.appendChild(cvs);
   const ctx = fitCanvasToCSS(cvs);
+  console.log(ctx);
   const ro  = new ResizeObserver(()=>fitCanvasToCSS(cvs));
   ro.observe(cvs);
 
@@ -331,41 +330,30 @@ async function placeCharacter(cfg, slideNo){
 }
 
 async function discoverManifest(){
-  const hardFallback = {
-    storyTitle: storyId.replace(/-/g," ").replace(/\b\w/g,s=>s.toUpperCase()),
-    slides: [
-      { background: "assets/tortoise_and_the_hare/slide1.png", characters: [] }
-    ]
-  };
-
   const url = `stories/${storyId}/slides.json`;
-  console.log("[loadSlidesJson] Fetching URL:", url);
-  try {
-    const r = await fetch(url, { cache: "no-store" });
-    console.log(`[loadSlidesJson] Response status: ${r.status} ${r.statusText}`);
-    if (!r.ok) return hardFallback;
-    const txt = await r.text();
-    try {
-      const parsed = JSON.parse(txt);
-      console.log("[loadSlidesJson] Parsed JSON OK");
-      return parsed;
-    } catch(parseError) {
-      console.warn("[loadSlidesJson] JSON parse error:", parseError.message);
-      return hardFallback;
-    }
-  } catch (err) {
-    console.error("[loadSlidesJson] Fetch or other error:", err.message);
-    return hardFallback;
-  }
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+  const txt = await r.text();
+  try { return JSON.parse(txt); }
+  catch { throw new Error("slides.json is invalid JSON"); }
 }
 
 async function showSlide(i){
   if (!manifest) return;
   cur = Math.max(0, Math.min(i, manifest.slides.length-1));
-  const s = manifest.slides[cur];
+  console.log(cur);
+  console.log(manifest.slides);
+  console.log("images/frames/tortoise-hare/frame1/slide1.png");
+  const s = manifest.slides[cur-1];
+  console.log(s);
+  framesCache.clear();
 
-  // background (hard-coded, set directly)
-  scene.src = "assets/tortoise_and_the_hare/slide1.png";
+  try {
+    scene.src = s.background;
+  } catch {
+    console.error("[storyboard] background failed:", s.background);
+    scene.removeAttribute("scr");
+  }
 
   clearLayers();
 
@@ -429,7 +417,8 @@ Object.assign(window, { nextSlide, prevSlide, showSlide });
     console.error("[storyboard] No slides discovered for", storyId);
     return;
   }
-  await showSlide(Math.min(initialSlide, manifest.slides.length-1));
+  //await showSlide(Math.min(initialSlide, manifest.slides.length-1));
+  await showSlide(initialSlide)
 
   addEventListener("keydown", e=>{
     if (e.key === "ArrowRight") nextSlide();
