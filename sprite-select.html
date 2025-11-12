@@ -81,8 +81,8 @@
     async function loadManifest() {
       const slide = Number(new URLSearchParams(location.search).get('slide')) || 1;
       const candidates = [
-        `stories/${storyId}/slide${slide}/characters.json`, // backup (not correct)
         `stories/${storyId}/characters.json`,           
+        `stories/${storyId}/slide${slide}/characters.json`, // backup (not correct)
       ];
       
       for (const url of candidates) {

@@ -14,6 +14,7 @@ const sessionId = ctx.session || localStorage.getItem("sessionCode") || null;
 const storyId = (ctx.story || localStorage.getItem("selectedStory") || "").replace(/_/g, "-");
 const slide = (()=>{ const q = new URLSearchParams(location.search); return Number(q.get("slide")) || Number(ctx.slide) || 1; })();
 
+console.log(ctx);
 // Stable device token (for locking identity)
 const deviceToken = (() => {
   let t = localStorage.getItem("deviceToken");
