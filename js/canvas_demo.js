@@ -726,9 +726,6 @@ async function sendToStoryboard() {
       const n = 1;
       const comp = document.createElement('canvas');
       comp.width = box.width; comp.height = box.height;
-      //comp.x = box.x; comp.y = box.y;
-      console.log("********************");
-      console.log(comp.width, comp.height, comp.x, comp.y);
       const cx = comp.getContext('2d');
 
       // paint for frame 1
