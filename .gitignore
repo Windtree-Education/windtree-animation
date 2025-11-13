@@ -1,0 +1,120 @@
+########################################
+# Node / JavaScript
+########################################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+.pnp/
+.pnp.js
+.next/
+dist/
+build/
+coverage/
+*.pem
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vite
+.vite/
+vite.config.timestamp-*
+
+# Bun
+bun.lockb
+
+########################################
+# Python / FastAPI
+########################################
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+
+# Virtual env
+env/
+venv/
+.venv/
+
+# Python tooling
+poetry.lock
+pip-log.txt
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Uvicorn / Gunicorn logs
+*.log
+
+########################################
+# Supabase
+########################################
+# Supabase local dev
+.supabase/
+supabase/.branches/
+supabase/.temp/
+supabase/migrations/**/temp.sql
+
+# Storage
+supabase/storage/*.bak
+
+# Secrets
+supabase/.env
+supabase/.env*
+
+########################################
+# Docker
+########################################
+docker-compose.override.yml
+docker-compose.local.yml
+*.pid
+*.pid.lock
+
+########################################
+# OS / Editor
+########################################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.cache/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.iml
+
+########################################
+# Misc
+########################################
+.env
+.env.*
+*.env
+*.swp
+*.swo
+*.tmp
+*.log
