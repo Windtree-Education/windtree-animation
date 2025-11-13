@@ -742,7 +742,6 @@ async function sendToStoryboard() {
           cx.drawImage(paintImg, box.x, box.y, paintImg.width, paintImg.height , box.x, box.y, box.width, box.height);
         }
       }
-      //console.log("paintURL:", paintURL);
       // outline (frame 1)
       const ol = outlineImgs[n];
       if (ol) {

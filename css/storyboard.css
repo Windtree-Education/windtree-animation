@@ -56,7 +56,7 @@ h2 {
   top: 0;
   width: 100%;      /* follow the slide size */
   height: 100%;
-  pointer-events: none;
+  pointer-events: auto;
   z-index: 2;
   border-radius: 12px;      /* match wrapper rounding */
   image-rendering: pixelated; /* keeps line art crisp when scaled */
@@ -79,9 +79,9 @@ h2 {
 }
 
 @keyframes bounceLeftRight {
-  0% { transform: translateX(-30px) translateY(-2px) rotate(-5deg); }
-  50% { transform: translateX(30px) translateY(-2px) rotate(5deg); }
-  100% { transform: translateX(-30px) translateY(-2px) rotate(-5deg); }
+  0% { transform: translateX(-30px) translateY(-2px) ; }
+  50% { transform: translateX(30px) translateY(-2px) ; }
+  100% { transform: translateX(-30px) translateY(-2px) ;}
 }
 
 @keyframes energeticHareHop {
@@ -100,10 +100,14 @@ h2 {
   50% { transform: translateY(-15px); }
 }
 
-img.character {
+/*EDITING THIS TO FIND COORDINATES FASTER*/
+img.character, canvas.char-layer {
   position: absolute;
   user-select: none;
   pointer-events: none;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 /* Match sizes from your selection page */
@@ -115,20 +119,20 @@ img.character.bird1    { width: 245px; height: auto; }
 img.character.bird2    { width: 200px; height: auto; }
 
 /* Reuse exact positions so they line up with the background */
-img.character.hare     { top: -10px; left: 20px;
+img.character.hare,  canvas.char-layer.hare    { top: -10px; left: 20px;
                         animation: energeticHareHop 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-img.character.tortoise { position: absolute;
+img.character.tortoise, canvas.char-layer.tortoise  { position: absolute;
                         /*top: 0px;
                         left: 20px; */
                         /* animation: walk 1s steps(4) infinite, moveRight 5s linear infinite; */
                         animation: bounceLeftRight 4s ease-in-out infinite;
                        }
 
-img.character.bear     { top: -50px; left: -170px; }
-img.character.squirrel { top: 80px;  left: -20px; }
-img.character.bird1    { top: 60px;  left: 97px;
+img.character.bear, canvas.char-layer.bear      { top: -50px; left: -170px; }
+img.character.squirrel, canvas.char-layer.squirrel { top: 80px;  left: -20px; }
+img.character.bird1, canvas.char-layer.bird1    { top: 60px;  left: 97px;
                         animation: birdBounce 1.2s ease-in-out infinite; }
-img.character.bird2    { top: 70px;  left: 125px;
+img.character.bird2, canvas.char-layer.bird2     { top: 70px;  left: 125px;
                         animation: birdBounce 1.5s ease-in-out infinite; }
 
 /* Optional idle motion for non-animated characters */

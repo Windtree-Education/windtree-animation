@@ -130,21 +130,35 @@ function mountGif(host, cfg){
 
 /* ----------------- NEW: Mount a static image (PNG, JPG, JPEG, WEBP, etc.) ----------------- */
 function mountStaticImage(host, cfg){
-  const { id, x, y, w, h, z=1 } = cfg;
-  const img = document.createElement("img");
-  img.src = cfg.framesPath;           // static image file
-  img.alt = id || "";
-  img.className = `character ${id||""}`;
-  Object.assign(img.style, {
+  const { id, x, y, w, h, z = 1 } = cfg;
+
+  const cvs = document.createElement("canvas");
+  cvs.className = `char-layer ${id || ""}`;
+  Object.assign(cvs.style, {
     position: "absolute",
-    left: pct(x), top: pct(y),
+    left: pct(x),
+    top: pct(y),
     width: pct(w),
     height: (h != null ? pct(h) : "auto"),
     zIndex: String(z),
     pointerEvents: "none"
   });
-  host.appendChild(img);
-  const stop = () => { try { img.remove(); } catch {} };
+  host.appendChild(cvs);
+  // sync internal resolution to CSS box
+  const ctx = fitCanvasToCSS(cvs);
+  const ro = new ResizeObserver(() => fitCanvasToCSS(cvs));
+  ro.observe(cvs);
+  console.log(cvs.width, cvs.height)
+
+  // load and draw the image into the canvas
+  const img = new Image();
+  img.src = cfg.framesPath;
+  img.onload = () => {
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
+  };
+
+  const stop = () => { try { cvs.remove(); } catch {} };
   loops.add(stop);
 }
 
@@ -206,7 +220,7 @@ async function buildOverlaysForSlideFromSingle(coloredImg, slideNo, charId, cvs)
 
 /* ----------------- Character placement ----------------- */
 async function placeCharacter(cfg, slideNo){
-  const { id, x, y, w, h, z=1, fps=4 } = cfg;
+  const { id, x, y, w, h, z=1, fps=1 } = cfg;
 
   // Check localStorage first for selected character
   if (id === selectedChar && legacySingle){
@@ -230,7 +244,7 @@ async function placeCharacter(cfg, slideNo){
       height:(h != null ? pct(h) : "auto"),
       zIndex:String(z),
       pointerEvents:"none",
-      animation: `bounceLeftRight 4s ease-in-out infinite`
+      //animation: `bounceLeftRight 4s ease-in-out infinite`
     });
     img.src = legacySingle;
     host.appendChild(img);
@@ -245,7 +259,7 @@ async function placeCharacter(cfg, slideNo){
     if (!h){
       h = document.createElement("div");
       h.id = "charHost";
-      Object.assign(h.style, { position:"absolute", left:0, top:0, width:"100%", height:"100%", pointerEvents:"none" });
+      Object.assign(h.style, { position:"absolute", left:0, top:0, width:"100%", height:"100%", pointerEvents:"none" }); 
       scene.parentElement.appendChild(h);
     }
     return h;
@@ -282,9 +296,11 @@ async function placeCharacter(cfg, slideNo){
   });
   host.appendChild(cvs);
   const ctx = fitCanvasToCSS(cvs);
-  console.log(ctx);
+  //console.log(ctx);
   const ro  = new ResizeObserver(()=>fitCanvasToCSS(cvs));
   ro.observe(cvs);
+  // This is to only show one frame
+  cfg.frameCount = 1;
 
   try{
     const baseFrames = await getFrames(framesPrefix, cfg.frameCount || 4);
@@ -341,9 +357,6 @@ async function discoverManifest(){
 async function showSlide(i){
   if (!manifest) return;
   cur = Math.max(0, Math.min(i, manifest.slides.length-1));
-  console.log(cur);
-  console.log(manifest.slides);
-  console.log("images/frames/tortoise-hare/frame1/slide1.png");
   const s = manifest.slides[cur-1];
   console.log(s);
   framesCache.clear();
@@ -363,12 +376,13 @@ async function showSlide(i){
 
   // place declared characters if provided; otherwise none (background-only slide still works)
   // Characters from assets by default
-  const chars = [
+  /*const chars = [
     { id: 'tortoise', x: 3,  y: 50, w: 60, h: 60, z: 1, framesPath: 'assets/tortoise_and_the_hare/tortoise.png' },
     { id: 'hare',     x: 45, y: 20, w: 50, h: 50, z: 1, framesPath: 'assets/tortoise_and_the_hare/hare.png' },
     { id: 'bird1',    x: 65, y: 0,  w: 30, h: 30, z: 1, framesPath: 'assets/tortoise_and_the_hare/bird1.png' },
     { id: 'bird2',    x: -5, y: 43, w: 30, h: 20, z: 1, framesPath: 'assets/tortoise_and_the_hare/bird2.png' }
-  ];
+  ];*/
+  const chars = s.characters || []; 
 
   // Supabase per-session override: if a user uploaded for this session/story/char, use it
   if (hasSupabaseConfig && session) {
@@ -391,8 +405,8 @@ async function showSlide(i){
     }));
   }
   await Promise.allSettled(chars.map(c => placeCharacter({
-    frameCount: 4,
-    fps: 4,
+    frameCount: 1,
+    fps: 0,
     z: 1,
     ...c
   }, slideNo)));
