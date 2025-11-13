@@ -12,13 +12,29 @@ const ctx = readCtx();
 if (!ctx.session) { location.replace("index.html"); throw 0; }
 sessionEl.textContent = `Session: ${ctx.session}`;
 
-// ---- Single story ----
-const stories = [
-  // Hard-coded thumbnail image
-  { id:"tortoise-hare", title:"The Tortoise and the Hare", thumb:"assets/tortoise_and_the_hare/slide1_with_characters.png" }
+//This adds all the story previews
+const MANIFEST_CANDIDATES = [
+  "/stories/config/manifest.json",
+  "./stories/config/manifest.json",
+  "stories/config/manifest.json"
 ];
 
+const FALLBACK_STORIES = [
+  { id:"tortoise-hare",      title:"The Tortoise and the Hare",          grades:["TK-2"],                thumb:"images/backgrounds/tortoise-hare/background.png" },
+  { id:"fisherman",          title:"The Fisherman",                      grades:["TK-2","G.3-4"],        thumb:"images/backgrounds/tortoise-hare/background.png" },
+  { id:"prince-pauper",      title:"Prince Pauper",                      grades:["G.3-4","G.5-8"],       thumb:"images/backgrounds/tortoise-hare/background.png" },
+  { id:"boy-who-cried-wolf", title:"The Boy Who Cried Wolf",             grades:["G.3-4"],               thumb:"images/backgrounds/tortoise-hare/background.png" },
+  { id:"lion-mouse",         title:"The Lion and the Mouse",             grades:["TK-2","G.3-4"],        thumb:"images/backgrounds/lion-mouse/background.png" },
+  { id:"little-ducks",       title:"Five Little Ducks",                  grades:["TK-2"],                thumb:"images/backgrounds/little-ducks/background.png" },
+  { id:"old-mcdonald",       title:"Old McDonald",                       grades:["TK-2"],                thumb:"images/backgrounds/tortoise-hare/background.png" },
+  { id:"frog-prince",        title:"The Frog Prince",                    grades:["G.3-4","G.5-8"],       thumb:"images/backgrounds/tortoise-hare/background.png" },
+  { id:"goldilocks-bears",   title:"Goldilocks and the Three Bears",     grades:["TK-2","G.3-4"],        thumb:"images/backgrounds/tortoise-hare/background.png" }
+];
+
+let stories = [...FALLBACK_STORIES];
+
 // ---- Render ----
+await tryLoadManifest();
 render();
 
 function render() {
@@ -28,6 +44,29 @@ function render() {
   for (const s of stories) {
     grid.appendChild(makeCard(s));
   }
+}
+
+async function tryLoadManifest() {
+  for (const url of MANIFEST_CANDIDATES) {
+    try {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (!Array.isArray(data?.stories)) continue;
+
+      stories = data.stories.map(s => ({
+        id: s.id,
+        title: s.title || toTitle(s.id),
+        grades: Array.isArray(s.grades) ? s.grades : [],
+        thumb: s.thumb || `/stories/${s.id.replace(/-/g, "_")}/background.png`
+      }));
+      console.info("[story-select] Using manifest:", url);
+      return;
+    } catch (e) {
+      // try next path
+    }
+  }
+  console.warn("[story-select] Manifest not found; using fallback list.");
 }
 
 function makeCard(s) {
