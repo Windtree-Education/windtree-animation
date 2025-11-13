@@ -35,8 +35,6 @@ const FALLBACK_STORIES = [
 let stories = [...FALLBACK_STORIES];
 
 // ---- Render ----
-await tryLoadManifest();
-bindFilters();
 render();
 
 function bindFilters() {
