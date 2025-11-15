@@ -1,0 +1,75 @@
+{
+  "storyTitle": "Lion and the Mouse",
+  "pageCount": 6,
+  "pages": [
+    
+    {
+      "background": "assets/images/backgrounds/little-ducks/background1.png",
+      "characters": [
+        { "id": "fish1",         "name": "Fish 1",        "sprite": "assets/images/sprites/little-ducks/page1/fish1.png", "x": 62, "y": 45, "w": 25  },
+        { "id": "fish2",         "name": "Fish 2",        "sprite": "assets/images/sprites/little-ducks/page1/fish2.png", "x": 72, "y": 40, "w": 25  },
+        { "id": "flamingo",      "name": "Flamingo",      "sprite": "assets/images/sprites/little-ducks/page1/flamingo.png", "x": 30, "y": 25, "w": 28 },
+        { "id": "last_duck",     "name": "Last Duck",     "sprite": "assets/images/sprites/little-ducks/page1/last_duck.png", "x": 75, "y": 60, "w": 30 },
+        { "id": "lead_duck",     "name": "Lead Duck",     "sprite": "assets/images/sprites/little-ducks/page1/lead_duck.png", "x": 25, "y": 60, "w": 30 },
+        { "id": "look_back_duck", "name": "Look Back Duck", "sprite": "assets/images/sprites/little-ducks/page1/look_back_duck.png", "x": 63, "y": 60, "w": 30 }, 
+        { "id": "mama_duck",     "name": "Mama Duck",     "sprite": "assets/images/sprites/little-ducks/page1/mama_duck.png", "x": 5, "y": 50, "w": 30},
+        { "id": "sleepy_duck",   "name": "Sleepy Duck",   "sprite": "assets/images/sprites/little-ducks/page1/sleepy_duck.png", "x": 37, "y": 60, "w": 30 }, 
+        { "id": "waving_duck",   "name": "Waving Duck",   "sprite": "assets/images/sprites/little-ducks/page1/waving_duck.png", "x": 50, "y": 60, "w": 30 }
+      ]
+    },
+    {
+      "background": "assets/images/backgrounds/little-ducks/background2.png",
+      "characters": [
+        { "id": "lead_duck",     "name": "Lead Duck",     "sprite": "assets/images/sprites/little-ducks/page2/lead_duck.png", "x": 20, "y": 53, "w": 30},
+        { "id": "mama_duck",     "name": "Mama Duck",     "sprite": "assets/images/sprites/little-ducks/page2/mama_duck.png", "x": 3.7, "y": 42, "w": 30},
+        { "id": "sleepy_duck",   "name": "Sleepy Duck",   "sprite": "assets/images/sprites/little-ducks/page2/sleepy_duck.png", "x": 30, "y": 53, "w": 30}, 
+        { "id": "waving_duck",   "name": "Waving Duck",   "sprite": "assets/images/sprites/little-ducks/page2/waving_duck.png", "x": 40, "y": 53, "w": 30},
+        { "id": "fox",   "name": "Fox",   "sprite": "assets/images/sprites/little-ducks/page2/fox.png", "x": 70, "y": 18, "w": 30},
+        { "id": "last_duck",   "name": "Last Duck",   "sprite": "assets/images/sprites/little-ducks/page2/last_duck.png", "x": 50, "y": 40, "w": 30},
+        { "id": "look_back_duck",   "name": "Look Back Duck",   "sprite": "assets/images/sprites/little-ducks/page2/look_back_duck.png", "x": 40, "y": 35, "w": 30},
+        { "id": "bush",   "name": "Bush",      "sprite": "assets/images/sprites/little-ducks/page2/bush.png", "x": 74, "y": 32, "w": 30}
+      ]
+    },
+    {
+      "background": "assets/images/backgrounds/little-ducks/background3.png",
+      "characters": [
+        { "id": "lead_duck",     "name": "Lead Duck",     "sprite": "assets/images/sprites/little-ducks/page3/lead_duck.png", "x": 28, "y": 55, "w": 28},
+        { "id": "mama_duck",     "name": "Mama Duck",     "sprite": "assets/images/sprites/little-ducks/page3/mama_duck.png", "x": 11.7, "y": 45, "w": 30},
+        { "id": "sleepy_duck",   "name": "Sleepy Duck",   "sprite": "assets/images/sprites/little-ducks/page3/sleepy_duck.png", "x": 38, "y": 55, "w": 28}, 
+        { "id": "waving_duck",   "name": "Waving Duck",   "sprite": "assets/images/sprites/little-ducks/page3/waving_duck.png", "x": 48, "y": 55, "w": 28}
+      ]
+    },
+    {
+      "background": "assets/images/backgrounds/little-ducks/background4.png",
+      "characters": [
+        { "id": "fox",     "name": "Fox",     "sprite": "assets/images/sprites/little-ducks/page4/fox.png", "x": 8, "y": 38, "w": 45},
+        { "id": "last_duck",     "name": "Last Duck",     "sprite": "assets/images/sprites/little-ducks/page4/last_duck.png", "x": 58, "y": 65, "w": 25},
+        { "id": "look_back_duck",   "name": "Look Back Duck",   "sprite": "assets/images/sprites/little-ducks/page4/look_back_duck.png", "x": 45, "y": 60, "w": 25} 
+      ]
+    },
+    {
+      "background": "assets/images/backgrounds/little-ducks/background5.png",
+      "characters": [
+        { "id": "lead_duck",     "name": "Lead Duck",     "sprite": "assets/images/sprites/little-ducks/page5/lead_duck.png", "x": 15, "y": 70, "w": 27},
+        { "id": "mama_duck",     "name": "Mama Duck",     "sprite": "assets/images/sprites/little-ducks/page5/mama_duck.png", "x": 11, "y": 20, "w": 48},
+        { "id": "sleepy_duck",   "name": "Sleepy Duck",   "sprite": "assets/images/sprites/little-ducks/page5/sleepy_duck.png", "x": 0, "y": 60, "w": 26}, 
+        { "id": "waving_duck",   "name": "Waving Duck",   "sprite": "assets/images/sprites/little-ducks/page5/waving_duck.png", "x": 36, "y": 70, "w": 27},
+        { "id": "fox",   "name": "Fox",   "sprite": "assets/images/sprites/little-ducks/page5/fox.png", "x": 60, "y": 27, "w": 28},
+        { "id": "last_duck",   "name": "Last Duck",   "sprite": "assets/images/sprites/little-ducks/page5/last_duck.png", "x": 48, "y": 43, "w": 27},
+        { "id": "look_back_duck",   "name": "Look Back Duck",   "sprite": "assets/images/sprites/little-ducks/page5/look_back_duck.png", "x": 40, "y": 47, "w": 27}
+      ]
+    },
+    {
+      "background": "assets/images/backgrounds/little-ducks/background6.png",
+      "characters": [
+        { "id": "lead_duck",     "name": "Lead Duck",     "sprite": "assets/images/sprites/little-ducks/page6/lead_duck.png", "x": 65, "y": 59, "w": 27},
+        { "id": "mama_duck",     "name": "Mama Duck",     "sprite": "assets/images/sprites/little-ducks/page6/mama_duck.png", "x": 35, "y": 40, "w": 40},
+        { "id": "sleepy_duck",   "name": "Sleepy Duck",   "sprite": "assets/images/sprites/little-ducks/page6/sleepy_duck.png", "x": 55, "y": 70, "w": 26}, 
+        { "id": "waving_duck",   "name": "Waving Duck",   "sprite": "assets/images/sprites/little-ducks/page6/waving_duck.png", "x": 75, "y": 52, "w": 27},
+        { "id": "flamingo",   "name": "Flamingo",   "sprite": "assets/images/sprites/little-ducks/page6/flamingo.png", "x": -5, "y": 10, "w": 50},
+        { "id": "last_duck",   "name": "Last Duck",   "sprite": "assets/images/sprites/little-ducks/page6/last_duck.png", "x": 65, "y": 43, "w": 27},
+        { "id": "look_back_duck",   "name": "Look Back Duck",   "sprite": "assets/images/sprites/little-ducks/page6/look_back_duck.png", "x": 75, "y": 70, "w": 27}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "storyTitle": "Lion and the Mouse",
+  "pageCount": 6,
+  "pages": [
+    
+    {
+      "background": "stories/lion-mouse/page1/page1.png",
+      "characters": [
+        { "id": "owl", "name": "Owl", "sprite": "assets/images/sprites/lion-mouse/page1/owl.png","x": 25, "y": 0, "w": 45 },
+        { "id": "mouse", "name": "Mouse", "sprite": "assets/images/sprites/lion-mouse/page1/mouse.png", "x": 62, "y": 60, "w": 32 }
+      ]
+    },
+    {
+      "background": "stories/lion-mouse/page2/page2.png",
+      "characters": [
+        { "id": "owl", "name": "Owl", "sprite": "assets/images/sprites/lion-mouse/page2/owl.png","x": 8, "y": 33, "w": 20 },
+        { "id": "mouse", "name": "Mouse", "sprite": "assets/images/sprites/lion-mouse/page2/mouse.png", "x": 35, "y": 68, "w": 13 },
+        { "id": "lion", "name": "Lion", "sprite": "assets/images/sprites/lion-mouse/page2/lion.png", "x": 45, "y": 40, "w": 50 }
+      ]
+    },
+    {
+      "background": "stories/lion-mouse/page3/page3.png",
+      "characters": [
+        { "id": "lion", "name": "Lion", "sprite": "assets/images/sprites/lion-mouse/page3/lion.png", "x": 0, "y": -10, "w": 100 },
+        { "id": "mouse", "name": "Mouse", "sprite": "assets/images/sprites/lion-mouse/page3/mouse.png", "x": 38, "y": 60, "w": 30 }
+      ]
+    },
+    {
+      "background": "stories/lion-mouse/page4/page4.png",
+      "characters": [
+        { "id": "lion", "name": "Lion", "sprite": "assets/images/sprites/lion-mouse/page4/lion.png", "x": 37, "y": 11, "w": 45 },
+        { "id": "mouse", "name": "Mouse", "sprite": "assets/images/sprites/lion-mouse/page4/mouse.png", "x": 60, "y": 55, "w": 35 },
+        { "id": "bush", "name": "Bush", "sprite": "assets/images/sprites/lion-mouse/page4/bush.png", "x": 0, "y": 13, "w": 100 },
+        { "id": "net", "name": "Net", "sprite": "assets/images/sprites/lion-mouse/page4/net.png", "x": 35, "y": -2, "w": 50 }
+      ]
+    },
+    {
+      "background": "stories/lion-mouse/page5/page5.png",
+      "characters": [
+        { "id": "lion", "name": "Lion", "sprite": "assets/images/sprites/lion-mouse/page5/lion.png", "x": 55, "y": 44, "w": 45 },
+        { "id": "mouse", "name": "Mouse", "sprite": "assets/images/sprites/lion-mouse/page5/mouse.png", "x": -10, "y": 23, "w": 60 },
+        { "id": "net", "name": "Net", "sprite": "assets/images/sprites/lion-mouse/page5/net.png", "x": 20, "y": -10, "w": 105 }
+      ]
+    },
+    {
+      "background": "stories/lion-mouse//page6/page6.png",
+      "characters": [
+        { "id": "owl", "name": "Owl", "sprite": "assets/images/sprites/lion-mouse/page6/owl.png", "x": 30, "y": 15, "w": 20 },
+        { "id": "lion", "name": "Lion", "sprite": "assets/images/sprites/lion-mouse/page6/lion.png", "x": 20, "y": 35, "w": 50  },
+        { "id": "geese", "name": "Geese", "sprite": "assets/images/sprites/lion-mouse/page6/geese.png", "x": 44, "y": 17, "w": 25 },
+        { "id": "squirrel1", "name": "Squirrel", "sprite": "assets/images/sprites/lion-mouse/page6/squirrel.png", "x": 85, "y": 27, "w": 18 },
+        { "id": "deer", "name": "Deer", "sprite": "assets/images/sprites/lion-mouse/page6/deer.png","x": 1, "y": 18, "w": 25 },
+        { "id": "butterfly", "name": "Butterfly",  "sprite": "assets/images/sprites/lion-mouse/page6/butterfly.png", "x": 75, "y": 60, "w": 25 },
+        { "id": "mouse", "name": "Mouse", "sprite": "assets/images/sprites/lion-mouse/page6/mouse.png", "x": 40.25, "y": 40, "w": 18 }
+      ]
+    }
+  ]
+}
