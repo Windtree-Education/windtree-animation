@@ -23,14 +23,21 @@ backBtn.addEventListener("click", () => {
 
 // Map reduced to only tortoise-hare
 const STORY_FOLDER_MAP = new Map([
-  ["tortoise-hare", "tortoise-hare"]
+  ["tortoise-hare",      "tortoise-hare"],
+  ["fisherman",          "fisherman"],
+  ["prince-pauper",      "prince-pauper"],
+  ["boy-who-cried-wolf", "boy-who-cried-wolf"],
+  ["lion-mouse",         "lion-mouse"],
+  ["little-ducks",       "little-ducks"],
+  ["old-mcdonald",       "old-mcdonald"],
+  ["frog-prince",        "frog-prince"],
+  ["goldilocks-bears",   "goldilocks-bears"]
 ]);
-
 // Use kebab-case folder names exactly as in your repo
 const storyFolder = STORY_FOLDER_MAP.get(storyId) || storyId;
 
 // Render only the first slide
-renderSlides(1);
+renderSlides(6);
 
 function renderSlides(count) {
   grid.innerHTML = "";
@@ -63,8 +70,23 @@ function makeCard(index) {
   img.loading = "lazy";
   img.decoding = "async";
 
-  // Hard-coded thumbnail image
-  img.src = "assets/tortoise_and_the_hare/slide1_with_characters.png";
+  const candidates = [
+    `stories/${storyFolder}/page${index}.png`,   // primary (your repo)
+    `./stories/${storyFolder}/page${index}.png`, // explicit relative
+    `stories/${storyFolder}/${index}.png`,        // fallback A (numeric at root)
+    `stories/${storyFolder}/pages/${index}.png`  // fallback B (in /slides/)
+  ];
+
+  let ci = 0;
+  img.src = candidates[ci];
+  img.onerror = () => {
+    ci++;
+    if (ci < candidates.length) {
+      img.src = candidates[ci];
+    } else {
+      thumb.innerHTML = `<div style="font-size:8rem; opacity:.35;">${index}</div>`;
+    }
+  };
 
   thumb.appendChild(img);
 

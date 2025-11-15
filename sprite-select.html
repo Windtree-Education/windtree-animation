@@ -71,6 +71,7 @@
     const storyId    = runtimeCtx.story;                                // e.g. "little-ducks"
     const q          = new URLSearchParams(location.search);
     const slide      = Number(q.get('slide')) || Number(runtimeCtx.slide) || 1;
+    console.log(slide);
 
     // DEV: show only some characters while building; leave [] for all
     const SHOW_ONLY = []; // NOTE: showing all characters now
@@ -79,36 +80,25 @@
     container.style.position = 'relative';
 
     async function loadManifest() {
-      // Prefer slide-level data if available; fall back to story-level characters.json
-      const slidesUrl = `stories/${storyId}/slides.json`;
-      try {
-        const res = await fetch(slidesUrl, { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          return data; // has { slides: [ { background, characters: [...] } ] }
-        }
-      } catch {}
-
+      const slide = Number(new URLSearchParams(location.search).get('slide')) || 1;
       const candidates = [
-        `stories/${storyId}/slide${slide}/characters.json`,
-        `stories/${storyId}/slides/${slide}/characters.json`,
-        `stories/${storyId}/characters.json`
+        `stories/${storyId}/characters.json`,  
+        `stories/${storyId}/page${slide}/characters.json`, // backup (not correct)         
       ];
       for (const url of candidates) {
-        try {
+      try {
           const res = await fetch(url, { cache: 'no-store' });
-          if (res.ok) return await res.json();
+          if (res.ok) return res.json();
         } catch {}
       }
-      console.warn('No manifest for', storyId, 'slide', slide);
-      return { background:'', characters:[] };
+      return { background: '', characters: [] };
     }
 
     function setBackground(paths) {
-      const [first, ...rest] = paths;
+      const first = paths;
       if (!first) return;
       sceneImg.src = first;
-      sceneImg.onerror = () => setBackground(rest);
+      //sceneImg.onerror = () => setBackground(rest);
     }
 
     // Auto-place ONLY those without authored positions
@@ -141,9 +131,10 @@
 
     (async () => {
       const manifest = await loadManifest();
+      const bgCandidate = manifest.pages[slide-1]
+      console.log(bgCandidate);
 
-      // Hard-code background to assets/tortoise_and_the_hare/slide1.png
-      sceneImg.src = "assets/tortoise_and_the_hare/slide1.png";
+      setBackground(bgCandidate.background);
 
       // Optional grade filter — safe if not present
       let allowed = null;
@@ -156,14 +147,7 @@
       const frag = document.createDocumentFragment();
       const needsAuto = [];
 
-      const slideChars = [
-        { id: 'tortoise', name: 'Tortoise', sprite: 'assets/tortoise_and_the_hare/tortoise.png', x: 3,  y: 50, w: 60, h: 60, z: 1 },
-        { id: 'hare',     name: 'Hare',     sprite: 'assets/tortoise_and_the_hare/hare.png',     x: 45, y: 20, w: 50, h: 50, z: 1 },
-        { id: 'bird1',    name: 'Bird 1',   sprite: 'assets/tortoise_and_the_hare/bird1.png',    x: 65, y: 0,  w: 30, h: 30, z: 1 },
-        { id: 'bird2',    name: 'Bird 2',   sprite: 'assets/tortoise_and_the_hare/bird2.png',    x: -5, y: 43, w: 30, h: 20, z: 1 }
-      ];
-
-      for (const c of slideChars) {
+      for (const c of (bgCandidate.characters || [])) {
         // Filter for dev
         if (SHOW_ONLY.length && !SHOW_ONLY.includes(c.id)) continue;
         if (allowed && allowed.size && !allowed.has(c.id)) continue;
@@ -177,9 +161,7 @@
 
         // Directly use provided sprite (assets)
         const v = (c.v != null) ? `?v=${c.v}` : "";
-        const src = (c.sprite || `assets/tortoise_and_the_hare/${c.id}.png`) + v;
-        img.src = src;
-        img.dataset.sprite = src;
+        img.src = (c.sprite || `images/${c.id}.png`) + v;
 
         img.style.position = 'absolute';
         // Visible overlays (background is plain scene)
